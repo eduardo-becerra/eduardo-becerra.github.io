@@ -1,29 +1,35 @@
 <?php
-// Configuración básica para el formulario de contacto
-$receiving_email_address = 'contacto@ejemplo.com';
+$receiving_email_address = 'mishelldominique@gmail.com';
 
-// Si el archivo validate.js está siendo utilizado, este código no será ejecutado
-// Puedes añadir código personalizado para manejar el formulario aquí
-
-if (file_exists($php_email_form = '../vendors/php-email-form/validate.js')) {
-  include($php_email_form);
-} else {
-  die('No se puede acceder al archivo validate.js!');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  die('Acceso no permitido');
 }
 
-$contact = new PHP_Email_Form;
-$contact->ajax = true;
+$name    = htmlspecialchars(trim($_POST['name'] ?? ''), ENT_QUOTES, 'UTF-8');
+$email   = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+$subject = htmlspecialchars(trim($_POST['subject'] ?? ''), ENT_QUOTES, 'UTF-8');
+$message = htmlspecialchars(trim($_POST['message'] ?? ''), ENT_QUOTES, 'UTF-8');
 
-$contact->to = $receiving_email_address;
-$contact->from_name = $_POST['name'];
-$contact->from_email = $_POST['email'];
-$contact->subject = $_POST['subject'];
+if (!$name || !$subject || !$message) {
+  die('Faltan datos');
+}
 
-// Agregar mensaje como párrafos HTML
-$contact->message = '<p>' . $_POST['message'] . '</p>';
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  die('Email no válido');
+}
 
-// Crear un mensaje de texto plano para clientes de correo electrónico que no aceptan HTML
-$contact->message .= '<p>Este mensaje fue enviado a través del formulario de contacto del sitio web.</p>';
+$headers  = "MIME-Version: 1.0\r\n";
+$headers .= "Content-type: text/html; charset=UTF-8\r\n";
+$headers .= "From: Formulario Web <no-reply@asesoradelactanciaec.com>\r\n";
+$headers .= "Reply-To: $name <$email>\r\n";
 
-echo $contact->send();
-?>
+$email_content  = "<p><strong>De:</strong> $name ($email)</p>";
+$email_content .= "<p><strong>Asunto:</strong> $subject</p>";
+$email_content .= "<p><strong>Mensaje:</strong></p><p>$message</p>";
+$email_content .= "<hr><p>Este mensaje fue enviado a través del formulario de contacto del sitio web.</p>";
+
+if (mail($receiving_email_address, $subject, $email_content, $headers)) {
+  echo "OK";
+} else {
+  echo "Error al enviar";
+}
