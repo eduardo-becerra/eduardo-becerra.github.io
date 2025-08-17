@@ -11,15 +11,8 @@
   function toggleScrolled() {
     const selectBody = document.querySelector("body");
     const selectHeader = document.querySelector("#header");
-    if (
-      !selectHeader.classList.contains("scroll-up-sticky") &&
-      !selectHeader.classList.contains("sticky-top") &&
-      !selectHeader.classList.contains("fixed-top")
-    )
-      return;
-    window.scrollY > 100
-      ? selectBody.classList.add("scrolled")
-      : selectBody.classList.remove("scrolled");
+    if (!selectHeader.classList.contains("scroll-up-sticky") && !selectHeader.classList.contains("sticky-top") && !selectHeader.classList.contains("fixed-top")) return;
+    window.scrollY > 100 ? selectBody.classList.add("scrolled") : selectBody.classList.remove("scrolled");
   }
 
   document.addEventListener("scroll", toggleScrolled);
@@ -73,29 +66,6 @@
   }
 
   /**
-   * Scroll top button
-   */
-  let scrollTop = document.querySelector(".scroll-top");
-
-  function toggleScrollTop() {
-    if (scrollTop) {
-      window.scrollY > 100
-        ? scrollTop.classList.add("active")
-        : scrollTop.classList.remove("active");
-    }
-  }
-  scrollTop.addEventListener("click", (e) => {
-    e.preventDefault();
-    /* window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    }); */
-  });
-
-  window.addEventListener("load", toggleScrollTop);
-  document.addEventListener("scroll", toggleScrollTop);
-
-  /**
    * Animation on scroll function and init
    */
   function aosInit() {
@@ -113,9 +83,7 @@
    */
   function initSwiper() {
     document.querySelectorAll(".init-swiper").forEach(function (swiperElement) {
-      let config = JSON.parse(
-        swiperElement.querySelector(".swiper-config").innerHTML.trim()
-      );
+      let config = JSON.parse(swiperElement.querySelector(".swiper-config").innerHTML.trim());
 
       if (swiperElement.classList.contains("swiper-tab")) {
         initSwiperWithCustomPagination(swiperElement, config);
@@ -130,26 +98,20 @@
   /**
    * Frequently Asked Questions Toggle
    */
-  document
-    .querySelectorAll(".faq-item h3, .faq-item .faq-toggle")
-    .forEach((faqItem) => {
-      faqItem.addEventListener("click", () => {
-        faqItem.parentNode.classList.toggle("faq-active");
-      });
+  document.querySelectorAll(".faq-item h3, .faq-item .faq-toggle").forEach((faqItem) => {
+    faqItem.addEventListener("click", () => {
+      faqItem.parentNode.classList.toggle("faq-active");
     });
+  });
 
   /**
    * Countdown timer
    */
   function updateCountDown(countDownItem) {
-    const timeleft =
-      new Date(countDownItem.getAttribute("data-count")).getTime() -
-      new Date().getTime();
+    const timeleft = new Date(countDownItem.getAttribute("data-count")).getTime() - new Date().getTime();
 
     const days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
+    const hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
 
@@ -195,13 +157,8 @@
       let section = document.querySelector(navmenulink.hash);
       if (!section) return;
       let position = window.scrollY + 200;
-      if (
-        position >= section.offsetTop &&
-        position <= section.offsetTop + section.offsetHeight
-      ) {
-        document
-          .querySelectorAll(".navmenu a.active")
-          .forEach((link) => link.classList.remove("active"));
+      if (position >= section.offsetTop && position <= section.offsetTop + section.offsetHeight) {
+        document.querySelectorAll(".navmenu a.active").forEach((link) => link.classList.remove("active"));
         navmenulink.classList.add("active");
       } else {
         navmenulink.classList.remove("active");
