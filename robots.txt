@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://tudominio.com/sitemap.xml
+
+# Disallow crawling of admin areas (optional)
+Disallow: /forms/
+Disallow: /vendors/
+Disallow: /assets/css/
+Disallow: /assets/js/
